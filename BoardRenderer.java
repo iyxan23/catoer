@@ -47,7 +47,7 @@ public class BoardRenderer {
     }
 
     private void clear(Board board) {
-        for (ChessPiece piece : board.getAllPieces())
+        for (Actor piece : this.world.getObjects(ChessPiece.class))
             this.world.removeObject(piece);
     }
 
