@@ -41,7 +41,7 @@ public class PieceRook extends ChessPiece {
                 y >= 0 && y < Board.HEIGHT
             ) {
                 ChessPiece piece = board.getPiece(x, y);
-                if (piece.color == color) break;
+                if (piece != null && piece.color == color) break;
 
                 moves.add(new PossibleMove(
                     new BoardCoordinate(x, y),

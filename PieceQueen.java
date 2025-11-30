@@ -45,6 +45,8 @@ public class PieceQueen extends ChessPiece {
             ) {
                 ChessPiece piece = board.getPiece(x, y);
 
+                if (piece != null && piece.color == color) break;
+
                 moves.add(new PossibleMove(
                     new BoardCoordinate(x, y),
                     piece

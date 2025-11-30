@@ -43,7 +43,7 @@ public class PieceKing extends ChessPiece {
             if (position.y + dy < 0 || position.y + dy >= Board.HEIGHT) continue;
 
             ChessPiece piece = board.getPiece(position.x + dx, position.y + dy);
-            if (piece.color == color) continue;
+            if (piece != null && piece.color == color) continue;
 
             possibleMoves.add(new PossibleMove(
                 position.newMove(dx, dy),
