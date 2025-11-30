@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=ChessPiece
+comment1.params=color\ coords
+comment1.target=ChessPiece(ChessPieceColor,\ BoardCoordinate)
+comment2.params=
+comment2.target=void\ possibleMoves()
+numComments=3
