@@ -20,6 +20,7 @@ public class ChessWorld extends World {
 
         this.board = Board.newStartingGame(CHESS_PIECE_SIZE);
         this.boardRenderer = new BoardRenderer(this);
+        this.boardRenderer.renderBoardBackground(CHESS_CELL_SIZE);
         this.boardRenderer.render(
             this.board,
             CHESS_CELL_SIZE,
