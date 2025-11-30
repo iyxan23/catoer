@@ -92,13 +92,18 @@ public class ChessGame {
 
         if (this.selectedPiece != null) {
             // clicking on other piece, while having one selected
-            // deselect selected
+            // may be a taking move
+            if (this.attemptMoveSelectedPieceTo(x, y)) return;
 
+            // no taking move, deselect selected if any, then select the new piece
             this.clearIndicators();
 
-            this.seletedPiecePossibleMoves = null;
-            this.selectedPiece = null;
-            return;
+            if (this.selectedPiece == piece) {
+                this.seletedPiecePossibleMoves = null;
+                this.selectedPiece = null;
+
+                return;
+            }
         }
 
         // only allow selecting the current turn's color
