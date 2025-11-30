@@ -30,40 +30,24 @@ public class ChessGame {
         this.analyzer = new BoardAnalyzer(this.board);
     }
 
+    private ChessPieceColor turn = ChessPieceColor.WHITE;
+
+    private void switchTurn() {
+        if (this.turn == ChessPieceColor.WHITE)
+            this.turn = ChessPieceColor.BLACK;
+        else
+            this.turn = ChessPieceColor.WHITE;
+    }
+
     private ArrayList<Actor> indicators = new ArrayList<>();
     private ChessPiece selectedPiece = null;
+    private PossibleMove[] seletedPiecePossibleMoves = null;
 
-    public void onLeftClick(int rawX, int rawY) {
-        // find the associated piece
-        int x = rawX / this.cellSize;
-        int y = (this.world.getHeight() - rawY) / this.cellSize;
-
-        ChessPiece piece = this.board.getPiece(x, y);
-        if (piece == null) return;
-
-        if (this.selectedPiece != null) {
-            // reset
-            for (Actor indicator : this.indicators)
-                this.world.removeObject(indicator);
-            this.indicators.clear();
-
-            // if already selected, deselect and return
-            if (piece == this.selectedPiece) {
-                this.selectedPiece = null;
-                return;
-            }
-        }
-
-        this.selectedPiece = piece;
-
-        PossibleMove[] moves = this.analyzer.analyzePossibleMoves(
-            piece, new BoardCoordinate(x, y)
-        );
-
-        // show indicators
+    private void showIndicators(PossibleMove[] moves) {
         for (PossibleMove move : moves) {
             PossibleMoveIndicator indicator =
                 new PossibleMoveIndicator(move, this.pieceSize);
+
             this.indicators.add(indicator);
             this.world.addObject(
                 indicator,
@@ -71,5 +55,96 @@ public class ChessGame {
                 ((Board.WIDTH - move.coordinate.y - 1) * this.cellSize) + (this.cellSize/2)
             );
         }
+    }
+
+    private void clearIndicators() {
+        for (Actor indicator : this.indicators)
+            this.world.removeObject(indicator);
+        this.indicators.clear();
+    }
+
+    public void onLeftClick(int rawX, int rawY) {
+        // find the associated piece
+        int x = rawX / this.cellSize;
+        int y = (this.world.getHeight() - rawY) / this.cellSize;
+
+        ChessPiece piece = this.board.getPiece(x, y);
+
+        if (piece == null) {
+            // clicking on an empty space
+
+            if (this.selectedPiece != null) {
+                if (this.attemptMoveSelectedPieceTo(x, y)) return;
+
+                // not valid move, deselect
+                this.clearIndicators();
+
+                this.seletedPiecePossibleMoves = null;
+                this.selectedPiece = null;
+
+                return;
+            }
+
+            return;
+        }
+
+        // piece is not null
+
+        if (this.selectedPiece != null) {
+            // clicking on other piece, while having one selected
+            // deselect selected
+
+            this.clearIndicators();
+
+            this.seletedPiecePossibleMoves = null;
+            this.selectedPiece = null;
+            return;
+        }
+
+        // only allow selecting the current turn's color
+        if (piece.color != this.turn) return;
+
+        this.selectPiece(piece, x, y);
+    }
+
+    private void selectPiece(ChessPiece piece, int x, int y) {
+        this.selectedPiece = piece;
+
+        PossibleMove[] moves = this.analyzer.analyzePossibleMoves(
+            piece, new BoardCoordinate(x, y)
+        );
+
+        this.seletedPiecePossibleMoves = moves;
+        this.showIndicators(moves);
+    }
+
+    private boolean attemptMoveSelectedPieceTo(int x, int y) {
+        // we have something selected, this may be an attempt to move
+        // check if it's included within the possible moves
+        for (PossibleMove move : this.seletedPiecePossibleMoves) {
+            if (move.coordinate.x == x && move.coordinate.y == y) {
+                this.moveSelectedPiece(move);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void moveSelectedPiece(PossibleMove move) {
+        this.clearIndicators();
+
+        this.board.movePiece(
+            this.selectedPiece.position,
+            move.coordinate
+        );
+
+        // trigger re-render
+        this.boardRenderer.render(this.board);
+
+        this.seletedPiecePossibleMoves = null;
+        this.selectedPiece = null;
+
+        this.switchTurn();
     }
 }

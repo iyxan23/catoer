@@ -53,6 +53,21 @@ public class Board {
         }
     }
 
+    public void movePiece(
+        BoardCoordinate from,
+        BoardCoordinate to
+    ) {
+        if (!this.hasPiece(from.x, from.y))
+            throw new RuntimeException("No piece exists at " + from);
+
+        this.pieces[to.x][to.y] = this.pieces[from.x][from.y];
+        this.pieces[from.x][from.y] = null;
+
+        this.pieces[to.x][to.y].position = to;
+
+        this.syncPieces();
+    }
+
     public ChessPiece[] getAllPieces() {
         return this.arrayPieces.toArray(new ChessPiece[0]);
     }
