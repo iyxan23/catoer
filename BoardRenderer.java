@@ -46,7 +46,14 @@ public class BoardRenderer {
         this.world.setBackground(background);
     }
 
+    private void clear(Board board) {
+        for (ChessPiece piece : board.getAllPieces())
+            this.world.removeObject(piece);
+    }
+
     public void render(Board board) {
+        this.clear(board);
+
         for (int x = 0; x < Board.WIDTH; x++) {
             for (int y = 0; y < Board.HEIGHT; y++) {
                 ChessPiece piece = board.getPiece(x, y);
