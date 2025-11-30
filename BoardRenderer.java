@@ -6,14 +6,24 @@ public class BoardRenderer {
     private static final Color BOARD_BLACK = new Color(72, 87, 153);
     private static final Color BOARD_WHITE = new Color(225, 241, 247);
 
-    public BoardRenderer(World world) {
+    private int cellSize;
+    private int pieceSize;
+
+    public BoardRenderer(
+        World world,
+        int cellSize,
+        int pieceSize
+    ) {
         this.world = world;
+
+        this.cellSize = cellSize;
+        this.pieceSize = pieceSize;
     }
 
-    public void renderBoardBackground(int cellSize) {
+    public void renderBoardBackground() {
         GreenfootImage background = new GreenfootImage(
-            Board.WIDTH * cellSize,
-            Board.HEIGHT * cellSize
+            Board.WIDTH * this.cellSize,
+            Board.HEIGHT * this.cellSize
         );
 
         for (int x = 0; x < Board.WIDTH; x++) {
@@ -25,10 +35,10 @@ public class BoardRenderer {
                 }
 
                 background.fillRect(
-                    x * cellSize,
-                    y * cellSize,
-                    cellSize,
-                    cellSize
+                    x * this.cellSize,
+                    y * this.cellSize,
+                    this.cellSize,
+                    this.cellSize
                 );
             }
         }
@@ -36,12 +46,7 @@ public class BoardRenderer {
         this.world.setBackground(background);
     }
 
-    public void render(
-        Board board,
-
-        int cellSize,
-        int pieceSize
-    ) {
+    public void render(Board board) {
         for (int x = 0; x < Board.WIDTH; x++) {
             for (int y = 0; y < Board.HEIGHT; y++) {
                 ChessPiece piece = board.getPiece(x, y);
@@ -50,12 +55,12 @@ public class BoardRenderer {
                 world.addObject(
                     piece,
 
-                    x * cellSize + (int)((cellSize) / 2),
+                    x * this.cellSize + (int)((this.cellSize) / 2),
 
                     // our coordinate system starts from the bottom left
                     // so we need to invert the y coordinate
                     this.world.getHeight() - (
-                        y * cellSize + (int)((cellSize) / 2)
+                        y * this.cellSize + (int)((this.cellSize) / 2)
                     )
                 );
             }

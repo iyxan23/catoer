@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=ChessGame
+comment1.params=world\ cellSize\ pieceSize
+comment1.target=ChessGame(greenfoot.World,\ int,\ int)
+comment2.params=rawX\ rawY
+comment2.target=void\ onLeftClick(int,\ int)
+numComments=3

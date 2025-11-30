@@ -1,9 +1,9 @@
 #BlueJ class context
 comment0.target=BoardRenderer
-comment1.params=world
-comment1.target=BoardRenderer(greenfoot.World)
-comment2.params=cellSize
-comment2.target=void\ renderBoardBackground(int)
-comment3.params=board\ cellSize\ pieceSize
-comment3.target=void\ render(Board,\ int,\ int)
+comment1.params=world\ cellSize\ pieceSize
+comment1.target=BoardRenderer(greenfoot.World,\ int,\ int)
+comment2.params=
+comment2.target=void\ renderBoardBackground()
+comment3.params=board
+comment3.target=void\ render(Board)
 numComments=4

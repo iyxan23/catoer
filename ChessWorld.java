@@ -8,8 +8,7 @@ public class ChessWorld extends World {
     private static final int CHESS_PIECE_SIZE = 68;
     private static final int CHESS_CELL_SIZE = 72;
 
-    private Board board;
-    private BoardRenderer boardRenderer;
+    private ChessGame chessGame;
 
     public ChessWorld() {
         super(
@@ -18,13 +17,29 @@ public class ChessWorld extends World {
             1
         );
 
-        this.board = Board.newStartingGame(CHESS_PIECE_SIZE);
-        this.boardRenderer = new BoardRenderer(this);
-        this.boardRenderer.renderBoardBackground(CHESS_CELL_SIZE);
-        this.boardRenderer.render(
-            this.board,
-            CHESS_CELL_SIZE,
-            CHESS_PIECE_SIZE
+        this.chessGame = new ChessGame(
+            this,
+            CHESS_CELL_SIZE, CHESS_PIECE_SIZE
         );
+        prepare();
+    }
+
+    public void act() {
+        if (Greenfoot.mouseClicked(null)) {
+            MouseInfo info = Greenfoot.getMouseInfo();
+
+            switch (info.getButton()) {
+                case 1:
+                    this.chessGame.onLeftClick(info.getX(), info.getY());
+                    break;
+            }
+        }
+    }
+    /**
+     * Prepare the world for the start of the program.
+     * That is: create the initial objects and add them to the world.
+     */
+    private void prepare()
+    {
     }
 }

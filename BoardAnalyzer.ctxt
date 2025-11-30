@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=BoardAnalyzer
+comment1.params=board
+comment1.target=BoardAnalyzer(Board)
+comment2.params=piece\ position
+comment2.target=PossibleMove[]\ analyzePossibleMoves(ChessPiece,\ BoardCoordinate)
+numComments=3
