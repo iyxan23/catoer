@@ -29,7 +29,10 @@ public class PiecePawn extends ChessPiece {
             potentialMoves.push(position.newMove(1, 1));
             potentialMoves.push(position.newMove(-1, 1));
 
-            if (position.y == 1) {
+            if (
+                position.y == 1 &&
+                !board.hasPiece(position.x, 2)
+            ) {
                 potentialMoves.newMove(0, 2),
             }
         } else {
@@ -37,7 +40,10 @@ public class PiecePawn extends ChessPiece {
             potentialMoves.push(position.newMove(1, -1));
             potentialMoves.push(position.newMove(-1, -1));
 
-            if (position.y == Board.HEIGHT - 2) {
+            if (
+                position.y == Board.HEIGHT - 2 &&
+                !board.hasPiece(position.x, Board.HEIGHT - 3)
+            ) {
                 potentialMoves.push(position.newMove(0, -2));
             }
         }
