@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.util.*;
 
 public class PieceQueen extends ChessPiece {
     public PieceQueen(
@@ -6,14 +7,14 @@ public class PieceQueen extends ChessPiece {
         BoardCoordinate position,
         int size
     ) {
-        super(color, position);
+        super(color, position, size);
 
         GreenfootImage img;
 
         if (color == ChessPieceColor.WHITE) {
-            img = new GreenfootImage("queen-white.png")
+            img = new GreenfootImage("white-queen.png");
         } else {
-            img = new GreenfootImage("queen-black.png");
+            img = new GreenfootImage("black-queen.png");
         }
 
         img.scale(size, size);
@@ -56,6 +57,6 @@ public class PieceQueen extends ChessPiece {
             }
         }
 
-        return moves.toArray(new BoardCoordinate[0]);
+        return moves.toArray(new PossibleMove[0]);
     }
 }

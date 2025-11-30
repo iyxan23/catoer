@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=BoardRenderer
+comment1.params=world
+comment1.target=BoardRenderer(greenfoot.World)
+comment2.params=board\ cellSize\ pieceSize
+comment2.target=void\ render(Board,\ int,\ int)
+numComments=3

@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Board
+comment1.params=
+comment1.target=Board()
+comment2.params=pieceSize
+comment2.target=Board\ newStartingGame(int)
+comment3.params=piece\ x\ y
+comment3.target=void\ setPiece(ChessPiece,\ int,\ int)
+comment4.params=x\ y
+comment4.target=ChessPiece\ getPiece(int,\ int)
+comment5.params=x\ y
+comment5.target=boolean\ hasPiece(int,\ int)
+numComments=6

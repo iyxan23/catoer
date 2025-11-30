@@ -1,17 +1,20 @@
+import greenfoot.*;
+import java.util.*;
+
 public class PiecePawn extends ChessPiece {
     public PiecePawn(
         ChessPieceColor color,
         BoardCoordinate position,
         int size
     ) {
-        super(color, position);
+        super(color, position, size);
 
         GreenfootImage img;
 
         if (color == ChessPieceColor.WHITE) {
-            img = new GreenfootImage("pawn-white.png")
+            img = new GreenfootImage("white-pawn.png");
         } else {
-            img = new GreenfootImage("pawn-black.png");
+            img = new GreenfootImage("black-pawn.png");
         }
 
         img.scale(size, size);
@@ -22,29 +25,29 @@ public class PiecePawn extends ChessPiece {
         BoardCoordinate position,
         Board board
     ) {
-        ArrayList<BoardCoordiante> potentialMoves;
+        ArrayList<BoardCoordinate> potentialMoves = new ArrayList<>();
 
         if (color == ChessPieceColor.WHITE) {
-            potentialMoves.push(position.newMove(0, 1));
-            potentialMoves.push(position.newMove(1, 1));
-            potentialMoves.push(position.newMove(-1, 1));
+            potentialMoves.add(position.newMove(0, 1));
+            potentialMoves.add(position.newMove(1, 1));
+            potentialMoves.add(position.newMove(-1, 1));
 
             if (
                 position.y == 1 &&
                 !board.hasPiece(position.x, 2)
             ) {
-                potentialMoves.newMove(0, 2),
+                potentialMoves.add(position.newMove(0, 2));
             }
         } else {
-            potentialMoves.push(position.newMove(0, -1));
-            potentialMoves.push(position.newMove(1, -1));
-            potentialMoves.push(position.newMove(-1, -1));
+            potentialMoves.add(position.newMove(0, -1));
+            potentialMoves.add(position.newMove(1, -1));
+            potentialMoves.add(position.newMove(-1, -1));
 
             if (
                 position.y == Board.HEIGHT - 2 &&
                 !board.hasPiece(position.x, Board.HEIGHT - 3)
             ) {
-                potentialMoves.push(position.newMove(0, -2));
+                potentialMoves.add(position.newMove(0, -2));
             }
         }
 
@@ -54,10 +57,10 @@ public class PiecePawn extends ChessPiece {
             if (move.x < 0 || move.x >= Board.WIDTH) continue;
             if (move.y < 0 || move.y >= Board.HEIGHT) continue;
 
-            ChessPiece piece = board.getPiece(move.x, move.y)
+            ChessPiece piece = board.getPiece(move.x, move.y);
             if (piece.color == color) continue;
 
-            possibleMoves.push(
+            possibleMoves.add(
                 new PossibleMove(move, piece)
             );
         }

@@ -9,25 +9,12 @@ public abstract class ChessPiece extends Actor {
         BoardCoordinate position,
         int size
     ) {
-        this.position = coords;
+        this.position = position;
         this.color = color;
     }
 
-    public PossibleMove[] calculatePossibleMoves(
+    public abstract PossibleMove[] calculatePossibleMoves(
         BoardCoordinate position,
         Board board
     );
-}
-
-public class PossibleMove {
-    public BoardCoordiante coordinate;
-    public ChessPiece takesPiece;
-
-    public PossibleMove(
-        BoardCoordinate coordinate,
-        ChessPiece takesPiece
-    ) {
-        this.coordinate = coordinate;
-        this.takesPiece = takesPiece;
-    }
 }

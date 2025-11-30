@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.util.*;
 
 public class PieceBishop extends ChessPiece {
     public PieceBishop(
@@ -6,14 +7,14 @@ public class PieceBishop extends ChessPiece {
         BoardCoordinate position,
         int size
     ) {
-        super(color, position);
+        super(color, position, size);
 
         GreenfootImage img;
 
         if (color == ChessPieceColor.WHITE) {
-            img = new GreenfootImage("bishop-white.png")
+            img = new GreenfootImage("white-bishop.png");
         } else {
-            img = new GreenfootImage("bishop-black.png");
+            img = new GreenfootImage("black-bishop.png");
         }
 
         img.scale(size, size);
@@ -37,7 +38,7 @@ public class PieceBishop extends ChessPiece {
 
             while (
                 x >= 0 && x < Board.WIDTH &&
-                y >= 0 && y < Board.HEIGH &&
+                y >= 0 && y < Board.HEIGHT
             ) {
                 ChessPiece piece = board.getPiece(x, y);
                 if (piece.color == color) break;

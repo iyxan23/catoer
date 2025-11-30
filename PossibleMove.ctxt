@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=PossibleMove
+comment1.params=coordinate\ takesPiece
+comment1.target=PossibleMove(BoardCoordinate,\ ChessPiece)
+numComments=2

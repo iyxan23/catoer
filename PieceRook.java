@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.util.*;
 
 public class PieceRook extends ChessPiece {
     public PieceRook(
@@ -6,14 +7,14 @@ public class PieceRook extends ChessPiece {
         BoardCoordinate coords,
         int size
     ) {
-        super(color, coords);
+        super(color, coords, size);
 
         GreenfootImage img;
 
         if (color == ChessPieceColor.WHITE) {
-            img = new GreenfootImage("rook-white.png")
+            img = new GreenfootImage("white-rook.png");
         } else {
-            img = new GreenfootImage("rook-black.png");
+            img = new GreenfootImage("black-rook.png");
         }
 
         img.scale(size, size);

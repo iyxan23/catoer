@@ -13,7 +13,7 @@ public class BoardCoordinate {
 
     public BoardCoordinate newMove(int x, int y) {
         return new BoardCoordinate(
-            this.x + x, this.y + y,
+            this.x + x, this.y + y
         );
     }
 }

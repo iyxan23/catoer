@@ -1,7 +1,7 @@
 #BlueJ class context
-comment0.target=ChessPiece
-comment1.params=color\ position\ size
-comment1.target=ChessPiece(ChessPieceColor,\ BoardCoordinate,\ int)
+comment0.target=PieceRook
+comment1.params=color\ coords\ size
+comment1.target=PieceRook(ChessPieceColor,\ BoardCoordinate,\ int)
 comment2.params=position\ board
 comment2.target=PossibleMove[]\ calculatePossibleMoves(BoardCoordinate,\ Board)
 numComments=3
