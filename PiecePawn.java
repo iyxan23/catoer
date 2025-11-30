@@ -25,46 +25,47 @@ public class PiecePawn extends ChessPiece {
         BoardCoordinate position,
         Board board
     ) {
-        ArrayList<BoardCoordinate> potentialMoves = new ArrayList<>();
+        ArrayList<PossibleMove> moves = new ArrayList<>();
 
-        if (color == ChessPieceColor.WHITE) {
-            potentialMoves.add(position.newMove(0, 1));
-            potentialMoves.add(position.newMove(1, 1));
-            potentialMoves.add(position.newMove(-1, 1));
+        int direction = (color == ChessPieceColor.WHITE) ? 1 : -1;
+        int startRow  = (color == ChessPieceColor.WHITE) ? 1 : Board.HEIGHT - 2;
 
-            if (
-                position.y == 1 &&
-                !board.hasPiece(position.x, 2)
-            ) {
-                potentialMoves.add(position.newMove(0, 2));
-            }
-        } else {
-            potentialMoves.add(position.newMove(0, -1));
-            potentialMoves.add(position.newMove(1, -1));
-            potentialMoves.add(position.newMove(-1, -1));
+        int x = position.x;
+        int y = position.y;
 
-            if (
-                position.y == Board.HEIGHT - 2 &&
-                !board.hasPiece(position.x, Board.HEIGHT - 3)
-            ) {
-                potentialMoves.add(position.newMove(0, -2));
+        BoardCoordinate oneStep = position.newMove(0, direction);
+        if (Board.inBounds(oneStep.x, oneStep.y) &&
+            !board.hasPiece(oneStep.x, oneStep.y)) {
+            moves.add(new PossibleMove(oneStep, null));
+
+            if (y == startRow) {
+                BoardCoordinate twoStep = position.newMove(0, 2 * direction);
+
+                if (Board.inBounds(twoStep.x, twoStep.y) &&
+                    !board.hasPiece(twoStep.x, twoStep.y)) {
+                    moves.add(new PossibleMove(twoStep, null));
+                }
             }
         }
 
-        ArrayList<PossibleMove> possibleMoves = new ArrayList<>();
+        int[][] captureOffsets = new int[][] {
+            { -1, direction },
+            {  1, direction }
+        };
 
-        for (BoardCoordinate move : potentialMoves) {
-            if (move.x < 0 || move.x >= Board.WIDTH) continue;
-            if (move.y < 0 || move.y >= Board.HEIGHT) continue;
+        for (int[] off : captureOffsets) {
+            int nx = x + off[0];
+            int ny = y + off[1];
 
-            ChessPiece piece = board.getPiece(move.x, move.y);
-            if (piece.color == color) continue;
+            if (!Board.inBounds(nx, ny)) continue;
 
-            possibleMoves.add(
-                new PossibleMove(move, piece)
-            );
+            ChessPiece target = board.getPiece(nx, ny);
+
+            if (target != null && target.color != color) {
+                moves.add(new PossibleMove(new BoardCoordinate(nx, ny), target));
+            }
         }
 
-        return possibleMoves.toArray(new PossibleMove[0]);
+        return moves.toArray(new PossibleMove[0]);
     }
 }
