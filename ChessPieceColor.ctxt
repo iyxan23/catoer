@@ -1,3 +1,5 @@
 #BlueJ class context
 comment0.target=ChessPieceColor
-numComments=1
+comment1.params=
+comment1.target=ChessPieceColor\ opposite()
+numComments=2

@@ -6,4 +6,6 @@ comment2.params=
 comment2.target=java.lang.String\ toString()
 comment3.params=x\ y
 comment3.target=BoardCoordinate\ newMove(int,\ int)
-numComments=4
+comment4.params=
+comment4.target=java.lang.Object\ clone()
+numComments=5

@@ -99,7 +99,7 @@ public class Board implements Cloneable {
         for (int x = 0; x < Board.WIDTH; x++) {
             for (int y = 0; y < Board.HEIGHT; y++) {
                 if (this.pieces[x][y] != null) {
-                    cloned.pieces[x][y] = (ChessPiece) this.pieces[x][y].clone();
+                    pieces[x][y] = (ChessPiece) this.pieces[x][y].clone();
                 }
             }
         }

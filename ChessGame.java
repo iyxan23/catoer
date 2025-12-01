@@ -28,15 +28,13 @@ public class ChessGame {
         this.boardRenderer.render(this.board);
 
         this.analyzer = new BoardAnalyzer(this.board);
+        this.analyzer.analyze(turn);
     }
 
     private ChessPieceColor turn = ChessPieceColor.WHITE;
 
     private void switchTurn() {
-        if (this.turn == ChessPieceColor.WHITE)
-            this.turn = ChessPieceColor.BLACK;
-        else
-            this.turn = ChessPieceColor.WHITE;
+        this.turn = this.turn.opposite();
     }
 
     private ArrayList<Actor> indicators = new ArrayList<>();
@@ -151,5 +149,6 @@ public class ChessGame {
         this.selectedPiece = null;
 
         this.switchTurn();
+        this.analyzer.analyze(turn);
     }
 }

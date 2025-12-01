@@ -12,11 +12,7 @@ public class BoardAnalyzer {
     }
 
     private void clearPossibleMoves() {
-        for (int x = 0; x < Board.WIDTH; x++) {
-            for (int y = 0; y < Board.HEIGHT; y++) {
-                this.allPossibleMoves[x][y] = null;
-            }
-        }
+        this.allPossibleMoves = new PossibleMove[Board.WIDTH][Board.HEIGHT][];
     }
 
     private static PossibleMove[][][] analyzeAllMoves(
@@ -39,15 +35,15 @@ public class BoardAnalyzer {
         PossibleMove[][][] boardPossibleMoves,
         ChessPieceColor currentTurnColor
     ) {
-        outerLoop:
         for (int x = 0; x < Board.WIDTH; x++) {
             for (int y = 0; y < Board.HEIGHT; y++) {
                 PossibleMove[] moves = boardPossibleMoves[x][y];
+                if (moves == null) continue;
 
                 for (PossibleMove move : moves) {
                     if (
                         move.takesPiece != null &&
-                        move.takesPiece.color != currentTurnColor &&
+                        move.takesPiece.color == currentTurnColor &&
                         move.takesPiece instanceof PieceKing
                     ) {
                         return move;
@@ -62,13 +58,15 @@ public class BoardAnalyzer {
     private PossibleMove checkMove = null;
 
     public void analyze(ChessPieceColor currentTurnColor) {
+        this.clearPossibleMoves();
+
         // basic board analysis
         PossibleMove[][][] allPossibleMoves =
             BoardAnalyzer.analyzeAllMoves(this.board, currentTurnColor);
 
         // check if there are any checks
         PossibleMove possibleCheck =
-            BoardAnalyzer.findChecks(this.allPossibleMoves, currentTurnColor); 
+            BoardAnalyzer.findChecks(allPossibleMoves, currentTurnColor);
 
         if (possibleCheck != null) this.checkMove = possibleCheck;
 
@@ -78,6 +76,7 @@ public class BoardAnalyzer {
         for (int x = 0; x < Board.WIDTH; x++) {
             for (int y = 0; y < Board.HEIGHT; y++) {
                 PossibleMove[] moves = allPossibleMoves[x][y];
+                if (moves == null) continue;
 
                 for (PossibleMove move : moves) {
                     // simulate this move, then re-analyze it.
@@ -104,9 +103,12 @@ public class BoardAnalyzer {
                     if (possibleCheck != null) {
                         if (BoardAnalyzer.findChecks(
                                 analysis, currentTurnColor
-                            ) == null)
+                            ) == null) {
                             // this is a valid move
+                            if (legalMoves[x][y] == null)
+                                legalMoves[x][y] = new ArrayList<>();
                             legalMoves[x][y].add(move);
+                        }
                         continue;
                     }
 
@@ -118,6 +120,9 @@ public class BoardAnalyzer {
                         // this is not a valid move
                         continue;
 
+
+                    if (legalMoves[x][y] == null) 
+                        legalMoves[x][y] = new ArrayList<>();
                     legalMoves[x][y].add(move);
                 }
             }
@@ -127,7 +132,9 @@ public class BoardAnalyzer {
         for (int x = 0; x < Board.WIDTH; x++) {
             for (int y = 0; y < Board.HEIGHT; y++) {
                 this.allPossibleMoves[x][y] =
-                    legalMoves[x][y].toArray(new PossibleMove[0]);
+                    legalMoves[x][y] != null ?
+                        legalMoves[x][y].toArray(new PossibleMove[0]) :
+                        new PossibleMove[0];
             }
         }
     }
