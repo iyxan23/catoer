@@ -2,10 +2,10 @@
 comment0.target=BoardRenderer
 comment1.params=world\ cellSize\ pieceSize
 comment1.target=BoardRenderer(greenfoot.World,\ int,\ int)
-comment2.params=
-comment2.target=void\ renderBoardBackground()
+comment2.params=flipped
+comment2.target=void\ renderBoardBackground(boolean)
 comment3.params=board
 comment3.target=void\ clear(Board)
-comment4.params=board
-comment4.target=void\ render(Board)
+comment4.params=board\ flipped
+comment4.target=void\ renderPieces(Board,\ boolean)
 numComments=5

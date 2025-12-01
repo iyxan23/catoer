@@ -20,7 +20,7 @@ public class BoardRenderer {
         this.pieceSize = pieceSize;
     }
 
-    public void renderBoardBackground() {
+    public void renderBoardBackground(boolean flipped) {
         GreenfootImage background = new GreenfootImage(
             Board.WIDTH * this.cellSize,
             Board.HEIGHT * this.cellSize
@@ -28,7 +28,7 @@ public class BoardRenderer {
 
         for (int x = 0; x < Board.WIDTH; x++) {
             for (int y = 0; y < Board.HEIGHT; y++) {
-                if ((x + y) % 2 == 0) {
+                if ((x + y) % 2 == (flipped ? 1 : 0)) {
                     background.setColor(BOARD_WHITE);
                 } else {
                     background.setColor(BOARD_BLACK);
@@ -51,7 +51,7 @@ public class BoardRenderer {
             this.world.removeObject(piece);
     }
 
-    public void render(Board board) {
+    public void renderPieces(Board board, boolean flipped) {
         this.clear(board);
 
         for (int x = 0; x < Board.WIDTH; x++) {
@@ -59,17 +59,20 @@ public class BoardRenderer {
                 ChessPiece piece = board.getPiece(x, y);
                 if (piece == null) continue;
 
-                world.addObject(
-                    piece,
+                int drawX = x * this.cellSize + (int)((this.cellSize) / 2);
 
-                    x * this.cellSize + (int)((this.cellSize) / 2),
-
-                    // our coordinate system starts from the bottom left
-                    // so we need to invert the y coordinate
-                    this.world.getHeight() - (
-                        y * this.cellSize + (int)((this.cellSize) / 2)
-                    )
+                // our coordinate system starts from the bottom left
+                // so we need to invert the y coordinate
+                int drawY = this.world.getHeight() - (
+                    y * this.cellSize + (int)((this.cellSize) / 2)
                 );
+
+                if (flipped) {
+                    drawX = this.world.getWidth() - drawX;
+                    drawY = this.world.getHeight() - drawY;
+                }
+
+                world.addObject(piece, drawX, drawY);
             }
         }
     }

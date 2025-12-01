@@ -11,6 +11,8 @@ public class ChessGame {
     private int cellSize;
     private int pieceSize;
 
+    private static final boolean ENABLE_FLIPPING_TURNS = true;
+
     public ChessGame(
         World world,
 
@@ -24,8 +26,8 @@ public class ChessGame {
 
         this.board = Board.newStartingGame(pieceSize);
         this.boardRenderer = new BoardRenderer(world, cellSize, pieceSize);
-        this.boardRenderer.renderBoardBackground();
-        this.boardRenderer.render(this.board);
+        this.boardRenderer.renderBoardBackground(false);
+        this.boardRenderer.renderPieces(this.board, false);
 
         this.analyzer = new BoardAnalyzer(this.board);
         this.analyzer.analyze(turn);
@@ -47,11 +49,7 @@ public class ChessGame {
                 new PossibleMoveIndicator(move, this.pieceSize);
 
             this.moveIndicators.add(indicator);
-            this.world.addObject(
-                indicator,
-                (move.coordinate.x * this.cellSize) + (this.cellSize/2),
-                ((Board.WIDTH - move.coordinate.y - 1) * this.cellSize) + (this.cellSize/2)
-            );
+            this.addActorOnBoard(indicator, move.coordinate);
         }
     }
 
@@ -73,11 +71,7 @@ public class ChessGame {
         this.pieceSelectionIndicator =
             new PieceSelectionIndicator(this.pieceSize);
 
-        this.world.addObject(
-            this.pieceSelectionIndicator,
-            (position.x * this.cellSize) + (this.cellSize/2),
-            ((Board.WIDTH - position.y - 1) * this.cellSize) + (this.cellSize/2)
-        );
+        this.addActorOnBoard(this.pieceSelectionIndicator, position);
     }
 
     private void hidePieceSelectionIndicator() {
@@ -90,6 +84,11 @@ public class ChessGame {
         // find the associated piece
         int x = rawX / this.cellSize;
         int y = (this.world.getHeight() - rawY) / this.cellSize;
+
+        if (this.isFlipped()) {
+            x = Board.WIDTH - x - 1;
+            y = Board.HEIGHT - y - 1;
+        }
 
         ChessPiece piece = this.board.getPiece(x, y);
 
@@ -157,6 +156,11 @@ public class ChessGame {
         return false;
     }
 
+    private boolean isFlipped() {
+        return ENABLE_FLIPPING_TURNS ?
+            (this.turn == ChessPieceColor.BLACK) : false;
+    }
+
     private void moveSelectedPiece(PossibleMove move) {
         this.clearMoveIndicators();
         this.hidePieceSelectionIndicator();
@@ -167,13 +171,15 @@ public class ChessGame {
             move.coordinate
         );
 
+        this.switchTurn();
+
         // trigger re-render
-        this.boardRenderer.render(this.board);
+        this.boardRenderer.renderBoardBackground(this.isFlipped());
+        this.boardRenderer.renderPieces(this.board, this.isFlipped());
 
         this.seletedPiecePossibleMoves = null;
         this.selectedPiece = null;
 
-        this.switchTurn();
         this.analyzeBoard();
     }
 
@@ -183,11 +189,7 @@ public class ChessGame {
         BoardCoordinate position
     ) {
         this.kingCheckIndicator = new KingCheckIndicator(this.pieceSize);
-        this.world.addObject(
-            this.kingCheckIndicator,
-            (position.x * this.cellSize) + (this.cellSize/2),
-            ((Board.WIDTH - position.y - 1) * this.cellSize) + (this.cellSize/2)
-        );
+        this.addActorOnBoard(this.kingCheckIndicator, position);
     }
 
     private void hideKingCheckIndicator() {
@@ -206,5 +208,17 @@ public class ChessGame {
             // show check indicator
             this.showKingCheckIndicator(checkMove.coordinate);
         }
+    }
+
+    private void addActorOnBoard(Actor actor, BoardCoordinate position) {
+        int worldX = (position.x * this.cellSize) + (this.cellSize/2);
+        int worldY = ((Board.WIDTH - position.y - 1) * this.cellSize) + (this.cellSize/2);
+
+        if (this.isFlipped()) {
+            worldX = this.world.getWidth() - worldX;
+            worldY = this.world.getHeight() - worldY;
+        }
+
+        this.world.addObject(actor, worldX, worldY);
     }
 }
