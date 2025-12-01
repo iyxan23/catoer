@@ -116,7 +116,7 @@ public class ChessGame {
         this.selectedPiece = piece;
 
         PossibleMove[] moves = this.analyzer.analyzePossibleMoves(
-            piece, new BoardCoordinate(x, y)
+            new BoardCoordinate(x, y)
         );
 
         this.seletedPiecePossibleMoves = moves;
