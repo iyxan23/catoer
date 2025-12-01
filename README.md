@@ -1,4 +1,4 @@
-<img src=".github/game.png" align=left height="368px" />
+<img src=".github/game.png" align=right height="368px" />
 
 <div id="user-content-toc">
   <ul style="list-style: none;">
@@ -8,21 +8,21 @@
   </ul>
 </div>
 
-Chess implemented in greenfoot. Final assignment for UMS TIF3221307 Visual
-Programming course.
+Chess implemented in [greenfoot](https://greenfoot.org/). Final assignment for
+UMS TIF3221307 "Visual Programming" course.
 
 This greenfoot chess game is very much playable. It implements basic piece move
 analysis based off of the standard chess rules in order to determine legal
-moves (e.g. can't move into check). Though there are special cases like en passant
-and castling that hasn't been implemented (yet).
+moves (e.g. can't move into check). Though there are special cases like en
+passant and castling that hasn't been implemented (yet).
 
 There's also board flipping on different turns, this setting can be toggled
 on/off in the `ChessGame.java` file (specifically the `ENABLE_FLIPPING_TURNS`
 final static variable).
 
-To the unassuming people that discovered this repo by chance, who might be asking
-why there isn't any proper code organization: you're right, problem is that
-greenfoot can't seem to discover the files under a folder. I do not fully
+To the unassuming people that discovered this repo by chance, who might be
+asking why there isn't any proper code organization: you're right, problem is
+that greenfoot can't seem to discover the files under a folder. I do not fully
 understand how it works, it doesn't even seem to require a `package` directive
 on the top of each java classes. So yeah, it _is_ messy.
 
