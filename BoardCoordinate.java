@@ -1,4 +1,4 @@
-public class BoardCoordinate {
+public class BoardCoordinate implements Cloneable {
     public int x;
     public int y;
 
@@ -15,5 +15,10 @@ public class BoardCoordinate {
         return new BoardCoordinate(
             this.x + x, this.y + y
         );
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

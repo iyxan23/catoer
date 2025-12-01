@@ -1,14 +1,19 @@
 import greenfoot.*;
 import java.util.*;
 
-public class Board {
+public class Board implements Cloneable {
     public static int WIDTH = 8;
     public static int HEIGHT = 8;
 
-    public ChessPiece[][] pieces = new ChessPiece[WIDTH][HEIGHT];
+    private ChessPiece[][] pieces = new ChessPiece[WIDTH][HEIGHT];
     private ArrayList<ChessPiece> arrayPieces = new ArrayList<>();
 
     public Board() {}
+
+    public Board(ChessPiece[][] pieces) {
+        this.pieces = pieces;
+        this.syncPieces();
+    }
 
     public static Board newStartingGame(int pieceSize) {
         Board board = new Board();
@@ -86,5 +91,18 @@ public class Board {
 
     public static boolean inBounds(int x, int y) {
         return x >= 0 && x < Board.WIDTH && y >= 0 && y < Board.HEIGHT;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        ChessPiece[][] pieces = new ChessPiece[Board.WIDTH][Board.HEIGHT];
+        for (int x = 0; x < Board.WIDTH; x++) {
+            for (int y = 0; y < Board.HEIGHT; y++) {
+                if (this.pieces[x][y] != null) {
+                    cloned.pieces[x][y] = (ChessPiece) this.pieces[x][y].clone();
+                }
+            }
+        }
+        return new Board(pieces);
     }
 }
