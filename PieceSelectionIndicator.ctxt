@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=PieceSelectionIndicator
+comment1.params=pieceSize
+comment1.target=PieceSelectionIndicator(int)
+numComments=2

@@ -37,16 +37,16 @@ public class ChessGame {
         this.turn = this.turn.opposite();
     }
 
-    private ArrayList<Actor> indicators = new ArrayList<>();
+    private ArrayList<Actor> moveIndicators = new ArrayList<>();
     private ChessPiece selectedPiece = null;
     private PossibleMove[] seletedPiecePossibleMoves = null;
 
-    private void showIndicators(PossibleMove[] moves) {
+    private void showMoveIndicators(PossibleMove[] moves) {
         for (PossibleMove move : moves) {
             PossibleMoveIndicator indicator =
                 new PossibleMoveIndicator(move, this.pieceSize);
 
-            this.indicators.add(indicator);
+            this.moveIndicators.add(indicator);
             this.world.addObject(
                 indicator,
                 (move.coordinate.x * this.cellSize) + (this.cellSize/2),
@@ -55,10 +55,35 @@ public class ChessGame {
         }
     }
 
-    private void clearIndicators() {
-        for (Actor indicator : this.indicators)
+    private void clearMoveIndicators() {
+        for (Actor indicator : this.moveIndicators)
             this.world.removeObject(indicator);
-        this.indicators.clear();
+        this.moveIndicators.clear();
+    }
+
+    private PieceSelectionIndicator pieceSelectionIndicator = null;
+
+    private void showPieceSelectionIndicator(
+        BoardCoordinate position
+    ) {
+        if (this.pieceSelectionIndicator != null)
+            this.hidePieceSelectionIndicator();
+
+
+        this.pieceSelectionIndicator =
+            new PieceSelectionIndicator(this.pieceSize);
+
+        this.world.addObject(
+            this.pieceSelectionIndicator,
+            (position.x * this.cellSize) + (this.cellSize/2),
+            ((Board.WIDTH - position.y - 1) * this.cellSize) + (this.cellSize/2)
+        );
+    }
+
+    private void hidePieceSelectionIndicator() {
+        if (this.pieceSelectionIndicator == null) return;
+        this.world.removeObject(this.pieceSelectionIndicator);
+        this.pieceSelectionIndicator = null;
     }
 
     public void onLeftClick(int rawX, int rawY) {
@@ -75,11 +100,7 @@ public class ChessGame {
                 if (this.attemptMoveSelectedPieceTo(x, y)) return;
 
                 // not valid move, deselect
-                this.clearIndicators();
-
-                this.seletedPiecePossibleMoves = null;
-                this.selectedPiece = null;
-
+                this.deselectPiece();
                 return;
             }
 
@@ -93,15 +114,8 @@ public class ChessGame {
             // may be a taking move
             if (this.attemptMoveSelectedPieceTo(x, y)) return;
 
-            // no taking move, deselect selected if any, then select the new piece
-            this.clearIndicators();
-
-            if (this.selectedPiece == piece) {
-                this.seletedPiecePossibleMoves = null;
-                this.selectedPiece = null;
-
-                return;
-            }
+            this.deselectPiece();
+            if (this.selectedPiece == piece) return;
         }
 
         // only allow selecting the current turn's color
@@ -118,7 +132,16 @@ public class ChessGame {
         );
 
         this.seletedPiecePossibleMoves = moves;
-        this.showIndicators(moves);
+        this.showMoveIndicators(moves);
+        this.showPieceSelectionIndicator(new BoardCoordinate(x, y));
+    }
+
+    private void deselectPiece() {
+        this.clearMoveIndicators();
+        this.hidePieceSelectionIndicator();
+
+        this.seletedPiecePossibleMoves = null;
+        this.selectedPiece = null;
     }
 
     private boolean attemptMoveSelectedPieceTo(int x, int y) {
@@ -135,7 +158,9 @@ public class ChessGame {
     }
 
     private void moveSelectedPiece(PossibleMove move) {
-        this.clearIndicators();
+        this.clearMoveIndicators();
+        this.hidePieceSelectionIndicator();
+        this.hideKingCheckIndicator();
 
         this.board.movePiece(
             this.selectedPiece.position,
@@ -149,6 +174,37 @@ public class ChessGame {
         this.selectedPiece = null;
 
         this.switchTurn();
+        this.analyzeBoard();
+    }
+
+    private KingCheckIndicator kingCheckIndicator = null;
+
+    private void showKingCheckIndicator(
+        BoardCoordinate position
+    ) {
+        this.kingCheckIndicator = new KingCheckIndicator(this.pieceSize);
+        this.world.addObject(
+            this.kingCheckIndicator,
+            (position.x * this.cellSize) + (this.cellSize/2),
+            ((Board.WIDTH - position.y - 1) * this.cellSize) + (this.cellSize/2)
+        );
+    }
+
+    private void hideKingCheckIndicator() {
+        if (this.kingCheckIndicator == null) return;
+
+        this.world.removeObject(this.kingCheckIndicator);
+        this.kingCheckIndicator = null;
+    }
+
+    private void analyzeBoard() {
         this.analyzer.analyze(turn);
+
+        PossibleMove checkMove = this.analyzer.getCheckMove();
+
+        if (checkMove != null) {
+            // show check indicator
+            this.showKingCheckIndicator(checkMove.coordinate);
+        }
     }
 }
