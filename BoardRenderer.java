@@ -20,7 +20,7 @@ public class BoardRenderer {
         this.pieceSize = pieceSize;
     }
 
-    public void renderBoardBackground(boolean flipped) {
+    private GreenfootImage createBackground(boolean flipped) {
         GreenfootImage background = new GreenfootImage(
             Board.WIDTH * this.cellSize,
             Board.HEIGHT * this.cellSize
@@ -43,7 +43,33 @@ public class BoardRenderer {
             }
         }
 
+        return background;
+    }
+
+    public void renderBoardBackground(boolean flipped) {
+        this.world.setBackground(this.createBackground(flipped));
+    }
+
+    public void renderCheckmatedBoard(
+        boolean flipped,
+        ChessPieceColor checkmatedTurn
+    ) {
+        GreenfootImage background = this.createBackground(flipped);
+
+        background.setColor(new Color(255, 255, 255, 75));
+        background.fillRect(0, 0, background.getWidth(), background.getHeight());
+
+        String checkmated = checkmatedTurn == ChessPieceColor.BLACK ? "Hitam" : "Putih";
+        background.setFont(new Font(true, false, 24));
+        background.setColor(Color.RED);
+        background.drawString(
+            checkmated + " telah di skakmat.",
+            (int) (background.getWidth() / 2) - 150,
+            (int) (background.getHeight() / 2) - 10
+        );
+
         this.world.setBackground(background);
+        Greenfoot.stop();
     }
 
     private void clear(Board board) {

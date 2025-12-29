@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import greenfoot.*;
 
 public class BoardAnalyzer {
     private Board board;
+    private boolean checkmated = false;
 
     // 8x8 -> list of moves
     private PossibleMove[][][] currentTurnPossibleMoves =
@@ -137,14 +139,23 @@ public class BoardAnalyzer {
         }
 
         // set currentTurnPossibleMoves
+        this.checkmated = true;
         for (int x = 0; x < Board.WIDTH; x++) {
             for (int y = 0; y < Board.HEIGHT; y++) {
                 this.currentTurnPossibleMoves[x][y] =
                     legalMoves[x][y] != null ?
                         legalMoves[x][y].toArray(new PossibleMove[0]) :
                         new PossibleMove[0];
+
+                if (legalMoves[x][y] != null) {
+                    this.checkmated = false;
+                }
             }
         }
+    }
+
+    public boolean isCheckmated() {
+        return this.checkmated;
     }
 
     public boolean isInCheck() {

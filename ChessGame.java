@@ -181,6 +181,12 @@ public class ChessGame {
         this.selectedPiece = null;
 
         this.analyzeBoard();
+
+        if (this.analyzer.isCheckmated()) {
+            this.boardRenderer.renderCheckmatedBoard(
+                this.isFlipped(), this.turn
+            );
+        }
     }
 
     private KingCheckIndicator kingCheckIndicator = null;
