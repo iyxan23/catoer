@@ -38,6 +38,11 @@ To-Do list:
 There are also a lot of other ways to optimize the game, especially with
 its analyzer. This might not be the most performant chess engine you'll find.
 
+### Try it out
+
+The game is published on Greenfoot's website, you can play it directly
+using your browser [here](https://www.greenfoot.org/scenarios/35963).
+
 ### License
 
 This project is licensed under the MIT License, see the [`LICENSE`](./LICENSE)
